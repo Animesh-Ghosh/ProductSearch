@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+  <title>Product Search</title>
+</head>
+<body>
+  <header>
+    <h1>Product Search</h1>
+  </header>
+  <main id="app">
+    {% raw %}
+    <section id="input">
+      <input type="text" name="product" v-model.lazy="q" @keyup.enter="searchProducts">
+      <button @click="searchProducts">Search</button>
+    </section>
+    <section id="output">
+      <table v-if="products.length">
+        <thead>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+        </thead>
+        <tbody>
+          <tr v-for="product of products">
+            <td>{{ product.image }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.price }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section id="actions">
+      <button @click="getPreviousProducts" :disabled="offset === 0">Previous</button>
+      <button @click="getNextProducts" :disabled="offset + limit === totalProducts">Next</button>
+      <button @click="indexProducts">Index</button>
+    </section>
+    {% endraw %}
+  </main>
+  <script type="module" src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

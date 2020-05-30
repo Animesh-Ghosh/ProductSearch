@@ -1,0 +1,25 @@
+@charset 'UTF-8';
+
+*, ::before, ::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+#output {
+  --border: 1px solid #000;
+}
+
+#output > table {
+  border-collapse: collapse;
+  border: var(--border);
+}
+
+#output > table tr, #output > table th, #output > table td {
+  border: var(--border);
+}
