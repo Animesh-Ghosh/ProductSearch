@@ -2,40 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
   <title>Product Search</title>
 </head>
 <body>
   <header>
-    <h1>Product Search</h1>
+    <h1>
+      <a href="{{ url_for('index') }}">Product Search</a>
+    </h1>
   </header>
   <main id="app">
     {% raw %}
     <section id="input">
-      <input type="text" name="product" v-model.lazy="q" @keyup.enter="searchProducts">
+      <input type="text" name="product" autocomplete="off" v-model.lazy="q" @keyup.enter="searchProducts">
       <button @click="searchProducts">Search</button>
     </section>
     <section id="output">
-      <table v-if="products.length">
-        <thead>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Price</th>
-        </thead>
-        <tbody>
-          <tr v-for="product of products">
-            <td>{{ product.image }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.description }}</td>
-            <td>{{ product.price }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <p v-if="message">
+        <strong>{{ message }}</strong>
+      </p>
+      <div style="">
+        <table v-if="products.length">
+          <thead>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+          </thead>
+          <tbody>
+            <tr v-for="product of products" :key="product.id">
+              <td>{{ product.id }}</td>
+              <td><img src="https://via.placeholder.com/150" :alt="product.image"></td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.description }}</td>
+              <td>{{ product.price }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
     <section id="actions">
-      <button @click="getPreviousProducts" :disabled="offset === 0">Previous</button>
-      <button @click="getNextProducts" :disabled="offset + limit === totalProducts">Next</button>
+      <div>
+        <button @click="getPreviousProducts" :disabled="offset === 0">Previous</button>
+        <button @click="getNextProducts" :disabled="offset + limit >= totalProducts">Next</button>
+      </div>
       <button @click="indexProducts">Index</button>
     </section>
     {% endraw %}

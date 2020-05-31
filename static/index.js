@@ -5,6 +5,7 @@ const apiRoot = `${window.origin}/api/v1/product`
 const app = new Vue({
   el: '#app',
   data: {
+    message: '',
     q: '',
     offset: 0,
     limit: 10,
@@ -13,17 +14,33 @@ const app = new Vue({
   },
   methods: {
     indexProducts: async function() {
-      console.log('Requesting indexing...');
-      const response = await fetch(`${apiRoot}/index`);
-      const json = await response.json();
-      console.log(json['message']);
+      console.log('Indexing...');
+      this.message = 'Indexing...';
+      try {
+        const response = await fetch(`${apiRoot}/index`);
+        const json = await response.json();
+        console.log(json['message']);
+        this.message = json['message'];
+
+      } catch (e) {
+        console.log(e);
+        this.message = e.message;
+      }
     },
     searchProducts: async function() {
+      this.message = 'Searching...';
       console.log(`Requesting products with search parameters: q = ${this.q}, offset = ${this.offset}, limit = ${this.limit}`);
-      const response = await fetch(`${apiRoot}/search?q=${this.q}&offset=${this.offset}&limit=${this.limit}`);
-      const json = await response.json();
-      this.products = json['products'];
-      this.totalProducts = json['totalProducts'];
+      try {
+        const response = await fetch(`${apiRoot}/search?q=${this.q}&offset=${this.offset}&limit=${this.limit}`);
+        const json = await response.json();
+        this.products = json['products'];
+        this.totalProducts = json['totalProducts'];
+        this.message = '';
+
+      } catch (e) {
+        console.log(e);
+        this.message = e.message;
+      }
     },
     getPreviousProducts: function() {
       this.computedOffset -= 10;
@@ -49,6 +66,5 @@ const app = new Vue({
   },
   created: async function() {
     this.indexProducts();
-    this.searchProducts();
   }
 });

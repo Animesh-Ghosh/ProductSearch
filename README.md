@@ -1,17 +1,27 @@
 # ProductSearch
 
-A single page product search application.
+A single page product search application using Whoosh.
+
 
 ## Installation
 
-1. Create virtual environment and install requirements:
+1. **Create virtual environment:**
 
 ```bash
-python -m venv env
+python3 -m venv env
 source env/bin/activate
 ```
 
-2. Run the app
+2. **Install requirements:**
+
+```bash
+pip install -r requirements.txt
+```
+
+
+## Execution
+
+Run the app
 
 ```bash
 flask run

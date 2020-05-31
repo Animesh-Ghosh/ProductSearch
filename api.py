@@ -1,27 +1,25 @@
-import json
-from pprint import pprint
+'''api module for retrieving products data from index'''
 from flask_restful import Resource, reqparse
-
-# argument parser for product
-product_reqparser = reqparse.RequestParser()
-product_reqparser.add_argument('q', required=True, type=str, help='Search text')
-product_reqparser.add_argument('offset', required=True, type=int, help='Starting point')
-product_reqparser.add_argument('limit', required=True, type=int, help='Number of products')
+from search import query_index
 
 
 class Products(Resource):
+    '''Products resource to find products according to querystring.'''
+
+    # argument parser for product
+    reqparser = reqparse.RequestParser()
+    reqparser.add_argument(
+        'q', required=True, type=str, help='Search text')
+    reqparser.add_argument(
+        'offset', required=True, type=int, help='Starting point')
+    reqparser.add_argument(
+        'limit', required=True, type=int, help='Number of products')
+
     def get(self):
-        args = product_reqparser.parse_args()
+        args = self.reqparser.parse_args()
 
-        with open('products.json', 'rb') as f:
-            products = json.load(f)
-
-        total_products = len(products['products'])
-
-        products = list(filter(
-            lambda x: x['id'] > args['offset'] and x['id'] <= args['offset'] + args['limit'],
-            products['products']
-        ))
+        products, total_products = query_index(
+            args['q'], args['offset'], args['limit'])
 
         return {
             'products': products,

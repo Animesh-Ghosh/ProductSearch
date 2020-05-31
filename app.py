@@ -1,7 +1,11 @@
+'''app module for running Flask server and serving index.html.'''
 import json
 from flask import Flask, render_template, jsonify
 from flask_restful import Api
+from whoosh.index import create_in
+from whoosh.fields import *
 from api import Products
+from search import create_index
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,12 +21,10 @@ def index():
 
 @app.route('/api/v1/product/index')
 def index_products():
-    '''View to index the products.json file and return a list of products'''
-    with open('products.json', 'rb') as f:
-        products = json.load(f)
+    '''View to index the products.json file.'''
 
-    # indexing code using whoosh
+    create_index()
 
     return jsonify({
-        'message': 'Indexing Products for keyword search...',
+        'message': 'Indexing complete!',
     })
